@@ -1,0 +1,27 @@
+#include <IRremote.h>
+int relay=7;
+int RECV_PIN = 11; // define input pin on Arduino 
+IRrecv irrecv(RECV_PIN); 
+decode_results results; // decode_results class is defined in IRremote.h
+int k=0;
+void setup() { 
+  Serial.begin(9600); 
+  irrecv.enableIRIn();
+  pinMode(relay,OUTPUT);// Start the receiver 
+} 
+
+void loop() { 
+  if (irrecv.decode(&results)) {
+    Serial.println(results.value, HEX); 
+    irrecv.resume(); // Receive the next value
+     digitalWrite(relay,HIGH);
+     k=0;
+  }
+  else if(k<=100){
+    k++;
+  }
+  else if(k>100){
+    digitalWrite(relay,LOW);
+  }
+  delay (100); // small delay to prevent reading errors
+}
